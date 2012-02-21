@@ -10,6 +10,17 @@ local function debug(msg)
   end
 end
 
+function addon:updateButtons()
+  if SpellIsTargeting() then return end -- may be placing a flare
+  for i=1,5 do
+    if IsRaidMarkerActive(i) then
+      addon.button[i].tex:SetTexture(1,1,1,1)
+    else
+      addon.button[i].tex:SetTexture(0,0,0,0)
+    end
+  end
+end
+
 local function makebutton(idx)
   local name = "FTW_Set"..idx
   local tooltip = _G["WORLD_MARKER"..idx]
@@ -24,7 +35,6 @@ local function makebutton(idx)
   local btn = CreateFrame("Button", name, addon.border, "SecureActionButtonTemplate")
   btn.tex = btn:CreateTexture()
   btn.tex:SetAllPoints()
-  btn.tex:SetTexture(0,0,0,0)
   btn:SetAttribute("type*", "macro")
   btn:SetAttribute("*-type*", "stop")
   if idx == 0 then
@@ -59,6 +69,14 @@ local function OnEvent(event,...)
   end
 end
 
+local function OnUpdate(frame,elap)
+  addon.elap = addon.elap or 0
+  addon.elap = addon.elap + elap
+  if addon.elap < 0.5 then return end
+  addon.elap = 0
+  addon:updateButtons()
+end
+
 function addon:Initialize()
   local f = CreateFrame("Frame", addonName.."Border", UIParent)
   f:SetBackdrop({
@@ -84,6 +102,7 @@ function addon:Initialize()
   f:SetScript("OnMouseDown",function(self) if IsModifierKeyDown() then f:StartMoving() end end)
   f:SetScript("OnMouseUp",function(self) f:StopMovingOrSizing() end)
   f:SetScript("OnEvent",OnEvent)
+  f:SetScript("OnUpdate",OnUpdate)
   f:RegisterEvent("RAID_ROSTER_UPDATE")
   f:RegisterEvent("PARTY_LEADER_CHANGED")
   f:RegisterEvent("PARTY_MEMBERS_CHANGED")
@@ -98,6 +117,7 @@ function addon:Initialize()
   makebutton(5):SetPoint("BOTTOM",0,yins)
   makebutton(0):SetPoint("BOTTOMRIGHT",-xins,yins)
   OnEvent("RAID_ROSTER_UPDATE")
+  addon:updateButtons()
 end
 addon:Initialize()
 
@@ -106,21 +126,13 @@ function setMarker(idx)
   idx = (idx and tonumber(idx)) or -1
   local btn = addon.button[idx]
   if btn then
-    btn.tex:SetTexture(1,1,1,1)
+    btn.tex:SetTexture(1,1,1,0.5)
   end
 end
 
 function clearMarker(idx)
   debug("clearMarker "..(idx or "nil"))
-  idx = (idx and tonumber(idx)) or -1
-  local btn = addon.button[idx]
-  if btn then
-    btn.tex:SetTexture(0,0,0,0)
-  else 
-    for _,b in ipairs(addon.button) do
-      b.tex:SetTexture(0,0,0,0)
-    end
-  end
+  addon:updateButtons()
 end
 
 hooksecurefunc("PlaceRaidMarker", setMarker)
