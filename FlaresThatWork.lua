@@ -61,7 +61,7 @@ local function makebutton(idx)
 end
 
 local function OnEvent(event,...)
-  if GetNumPartyMembers() > 0 or 
+  if (GetNumPartyMembers() > 0 and GetNumRaidMembers() == 0) or 
      (GetNumRaidMembers() > 0 and IsRaidOfficer()) then
     addon.border:Show()
   else
