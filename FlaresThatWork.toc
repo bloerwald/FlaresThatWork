@@ -1,0 +1,12 @@
+## Interface: 40300
+## Title: FlaresThatWork
+## Notes: Provides buttons and keybinds for raid flare world markers that never stop working mid-session
+## Author: oscarucb
+## Version: @project-version@
+## X-Build: @project-revision@
+## X-ReleaseDate: @project-date-iso@
+## X-Revision: $Revision: 14 $
+
+FlaresThatWork.lua
+
+Bindings.xml

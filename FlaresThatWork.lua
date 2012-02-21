@@ -1,0 +1,136 @@
+-- FlaresThatWork by oscarucb
+--local L = FTW_locale()
+FlaresThatWork = {}
+local addon = FlaresThatWork
+local addonName = "FlaresThatWork"
+
+local function debug(msg)
+  if addon.debug then
+    print(addonName..": "..msg)
+  end
+end
+
+local function makebutton(idx)
+  local name = "FTW_Set"..idx
+  local tooltip = _G["WORLD_MARKER"..idx]
+  local icon
+  if idx == 0 then 
+     name = "FTW_Clear"
+     tooltip = REMOVE_WORLD_MARKERS
+     icon = "\124cffffffffC\124r"
+  else
+     icon = tooltip:match("(\124T.+\124t)")
+  end
+  local btn = CreateFrame("Button", name, addon.border, "SecureActionButtonTemplate")
+  btn.tex = btn:CreateTexture()
+  btn.tex:SetAllPoints()
+  btn.tex:SetTexture(0,0,0,0)
+  btn:SetAttribute("type", "macro")
+  if idx == 0 then
+    btn:SetAttribute("macrotext", "/clearworldmarker all")
+  else
+    btn:SetAttribute("macrotext", "/clearworldmarker "..idx.."\n/worldmarker "..idx)
+  end
+  --btn:SetAttribute("alt-type", "click")
+  --btn:SetAttribute("alt-clickbutton", addon.border:GetName())
+  btn:RegisterForClicks("AnyDown")
+  btn:SetSize(16,16)
+  btn:SetNormalFontObject(GameFontNormal)
+  btn:SetText(icon)
+  btn:SetScript("OnEnter", function(self) 
+            GameTooltip:SetOwner(addon.border, "ANCHOR_TOPRIGHT");
+            GameTooltip:SetText(tooltip);
+            GameTooltip:Show()
+      end)
+  btn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+  btn:Show()
+  addon.button = addon.button or {}
+  addon.button[idx] = btn
+  return btn
+end
+
+local function OnEvent(event,...)
+  if GetNumPartyMembers() > 0 or 
+     (GetNumRaidMembers() > 0 and IsRaidOfficer()) then
+    addon.border:Show()
+  else
+    addon.border:Hide()
+  end
+end
+
+function addon:Initialize()
+  local f = CreateFrame("Frame", addonName.."Border", UIParent)
+  f:SetBackdrop({
+    bgFile = "Interface/DialogFrame/UI-DialogBox-Background",
+    edgeFile =  "Interface/DialogFrame/UI-DialogBox-Border",
+    --bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+    --edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+    tile = true, tileSize = 32, edgeSize = 16,
+    insets = { left = 1, right = 1, top = 1, bottom = 1 }
+  })
+  f:SetBackdropColor(0,0,0,0.5)
+  f:SetSize(56,40)
+  f:SetMovable(true)
+  f:SetToplevel(true)
+  f:EnableMouse(true)
+  --settings.winpos = settings.winpos or { x = 0, y = UIParent:GetHeight()/4 }
+  f:ClearAllPoints()
+  -- f:SetPoint("CENTER", UIParent, settings.winpos.x, settings.winpos.y)
+  f:SetUserPlaced(true)
+  f:SetFrameStrata("DIALOG")
+  f:SetClampedToScreen(true)
+  f:SetPoint("BOTTOMLEFT")
+  f:SetScript("OnMouseDown",function(self) if IsModifierKeyDown() then self:StartMoving() end end)
+  f:SetScript("OnMouseUp",function(self) self:StopMovingOrSizing() end)
+  f:SetScript("OnEvent",OnEvent)
+  f:RegisterEvent("RAID_ROSTER_UPDATE")
+  f:RegisterEvent("PARTY_LEADER_CHANGED")
+  f:RegisterEvent("PARTY_MEMBERS_CHANGED")
+  f:RegisterEvent("PARTY_CONVERTED_TO_RAID")
+  addon.border = f
+
+  local xins,yins = 4,4
+  makebutton(1):SetPoint("TOPLEFT",xins,-yins)
+  makebutton(2):SetPoint("TOP",0,-yins)
+  makebutton(3):SetPoint("TOPRIGHT",-xins,-yins)
+  makebutton(4):SetPoint("BOTTOMLEFT",xins,yins)
+  makebutton(5):SetPoint("BOTTOM",0,yins)
+  makebutton(0):SetPoint("BOTTOMRIGHT",-xins,yins)
+  OnEvent("RAID_ROSTER_UPDATE")
+end
+addon:Initialize()
+
+function setMarker(idx)
+  debug("setMarker "..(idx or "nil"))
+  idx = (idx and tonumber(idx)) or -1
+  local btn = addon.button[idx]
+  if btn then
+    btn.tex:SetTexture(1,1,1,1)
+  end
+end
+
+function clearMarker(idx)
+  debug("clearMarker "..(idx or "nil"))
+  idx = (idx and tonumber(idx)) or -1
+  local btn = addon.button[idx]
+  if btn then
+    btn.tex:SetTexture(0,0,0,0)
+  else 
+    for _,b in ipairs(addon.button) do
+      b.tex:SetTexture(0,0,0,0)
+    end
+  end
+end
+
+hooksecurefunc("PlaceRaidMarker", setMarker)
+hooksecurefunc("ClearRaidMarker", clearMarker)
+
+
+BINDING_HEADER_FTW = WORLD_MARKER:gsub("%%.","")
+_G["BINDING_NAME_CLICK FTW_Set1:LeftButton"] = WORLD_MARKER1
+_G["BINDING_NAME_CLICK FTW_Set2:LeftButton"] = WORLD_MARKER2
+_G["BINDING_NAME_CLICK FTW_Set3:LeftButton"] = WORLD_MARKER3
+_G["BINDING_NAME_CLICK FTW_Set4:LeftButton"] = WORLD_MARKER4
+_G["BINDING_NAME_CLICK FTW_Set5:LeftButton"] = WORLD_MARKER5
+_G["BINDING_NAME_CLICK FTW_Clear:LeftButton"] = REMOVE_WORLD_MARKERS
+

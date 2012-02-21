@@ -1,0 +1,14 @@
+<Bindings>
+	<Binding name="CLICK FTW_Set1:LeftButton" header="FTW">
+	</Binding>
+	<Binding name="CLICK FTW_Set2:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Set3:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Set4:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Set5:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Clear:LeftButton">
+	</Binding>
+</Bindings>
