@@ -61,6 +61,7 @@ local function makebutton(idx)
 end
 
 local function OnEvent(event,...)
+  if InCombatLockdown() then return end
   if (GetNumPartyMembers() > 0 and GetNumRaidMembers() == 0) or 
      (GetNumRaidMembers() > 0 and IsRaidOfficer()) then
     addon.border:Show()
@@ -107,6 +108,7 @@ function addon:Initialize()
   f:RegisterEvent("PARTY_LEADER_CHANGED")
   f:RegisterEvent("PARTY_MEMBERS_CHANGED")
   f:RegisterEvent("PARTY_CONVERTED_TO_RAID")
+  f:RegisterEvent("PLAYER_REGEN_ENABLED")
   addon.border = f
 
   local xins,yins = 4,4
