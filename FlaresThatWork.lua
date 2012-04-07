@@ -1,8 +1,8 @@
 -- FlaresThatWork by oscarucb
---local L = FTW_locale()
-FlaresThatWork = {}
-local addon = FlaresThatWork
-local addonName = "FlaresThatWork"
+local addonName, vars = ...
+local L = vars.L
+local addon = vars
+FlaresThatWork = vars
 
 local function debug(msg)
   if addon.debug then
