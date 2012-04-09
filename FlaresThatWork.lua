@@ -123,7 +123,7 @@ function addon:Initialize()
 end
 addon:Initialize()
 
-function setMarker(idx)
+local function setMarker(idx)
   debug("setMarker "..(idx or "nil"))
   idx = (idx and tonumber(idx)) or -1
   local btn = addon.button[idx]
@@ -132,7 +132,7 @@ function setMarker(idx)
   end
 end
 
-function clearMarker(idx)
+local function clearMarker(idx)
   debug("clearMarker "..(idx or "nil"))
   addon:updateButtons()
 end
