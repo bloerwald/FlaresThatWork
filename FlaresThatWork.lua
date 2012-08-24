@@ -62,8 +62,9 @@ end
 
 local function OnEvent(event,...)
   if InCombatLockdown() then return end
-  if (GetNumPartyMembers() > 0 and GetNumRaidMembers() == 0) or 
-     (GetNumRaidMembers() > 0 and IsRaidOfficer()) then
+  if GetNumGroupMembers() > 0 and 
+     (not UnitInRaid("player") or 
+      (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
     addon.border:Show()
   else
     addon.border:Hide()
@@ -104,9 +105,8 @@ function addon:Initialize()
   f:SetScript("OnMouseUp",function(self) f:StopMovingOrSizing() end)
   f:SetScript("OnEvent",OnEvent)
   f:SetScript("OnUpdate",OnUpdate)
-  f:RegisterEvent("RAID_ROSTER_UPDATE")
+  f:RegisterEvent("GROUP_ROSTER_UPDATE")
   f:RegisterEvent("PARTY_LEADER_CHANGED")
-  f:RegisterEvent("PARTY_MEMBERS_CHANGED")
   f:RegisterEvent("PARTY_CONVERTED_TO_RAID")
   f:RegisterEvent("PLAYER_REGEN_ENABLED")
   addon.border = f
@@ -118,7 +118,7 @@ function addon:Initialize()
   makebutton(4):SetPoint("BOTTOMLEFT",xins,yins)
   makebutton(5):SetPoint("BOTTOM",0,yins)
   makebutton(0):SetPoint("BOTTOMRIGHT",-xins,yins)
-  OnEvent("RAID_ROSTER_UPDATE")
+  OnEvent("GROUP_ROSTER_UPDATE")
   addon:updateButtons()
 end
 addon:Initialize()
