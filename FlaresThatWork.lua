@@ -3,6 +3,7 @@ local addonName, vars = ...
 local L = vars.L
 local addon = vars
 FlaresThatWork = vars
+local iconsz = 16
 
 local function debug(msg)
   if addon.debug then
@@ -12,13 +13,17 @@ end
 
 function addon:updateButtons()
   if SpellIsTargeting() then return end -- may be placing a flare
+  local w, h = addon.border:GetSize()
+  local scale = math.min((w-8)/3, (h-8)/2)/iconsz
   for i=1,5 do
     if IsRaidMarkerActive(i) then
       addon.button[i].tex:SetTexture(1,1,1,1)
     else
       addon.button[i].tex:SetTexture(0,0,0,0)
     end
+    addon.button[i]:SetScale(scale)
   end
+  addon.button[0]:SetScale(scale)
 end
 
 local function makebutton(idx)
@@ -45,7 +50,7 @@ local function makebutton(idx)
   btn:SetScript("OnMouseDown", addon.border:GetScript("OnMouseDown"))
   btn:SetScript("OnMouseUp", addon.border:GetScript("OnMouseUp"))
   btn:RegisterForClicks("AnyDown")
-  btn:SetSize(16,16)
+  btn:SetSize(iconsz, iconsz)
   btn:SetNormalFontObject(GameFontNormal)
   btn:SetText(icon)
   btn:SetScript("OnEnter", function(self) 
@@ -90,7 +95,8 @@ function addon:Initialize()
     insets = { left = 1, right = 1, top = 1, bottom = 1 }
   })
   f:SetBackdropColor(0,0,0,0.5)
-  f:SetSize(56,40)
+  f:SetSize(8+3*iconsz,8+2*iconsz)
+  f:SetMinResize(f:GetSize())
   f:SetMovable(true)
   f:SetToplevel(true)
   f:EnableMouse(true)
@@ -98,10 +104,17 @@ function addon:Initialize()
   f:ClearAllPoints()
   -- f:SetPoint("CENTER", UIParent, settings.winpos.x, settings.winpos.y)
   f:SetUserPlaced(true)
+  f:SetResizable(true)
   f:SetFrameStrata("DIALOG")
   f:SetClampedToScreen(true)
   f:SetPoint("BOTTOMLEFT")
-  f:SetScript("OnMouseDown",function(self) if IsModifierKeyDown() then f:StartMoving() end end)
+  f:SetScript("OnMouseDown",function(self) 
+      if IsShiftKeyDown() then 
+         f:StartSizing() 
+      elseif IsModifierKeyDown() then 
+         f:StartMoving() 
+      end 
+  end)
   f:SetScript("OnMouseUp",function(self) f:StopMovingOrSizing() end)
   f:SetScript("OnEvent",OnEvent)
   f:SetScript("OnUpdate",OnUpdate)
