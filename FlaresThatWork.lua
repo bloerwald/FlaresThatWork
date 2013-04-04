@@ -21,9 +21,9 @@ function addon:updateButtons()
     else
       addon.button[i].tex:SetTexture(0,0,0,0)
     end
-    addon.button[i]:SetScale(scale)
+    if not InCombatLockdown() then addon.button[i]:SetScale(scale) end
   end
-  addon.button[0]:SetScale(scale)
+  if not InCombatLockdown() then addon.button[0]:SetScale(scale) end
 end
 
 local function makebutton(idx)
