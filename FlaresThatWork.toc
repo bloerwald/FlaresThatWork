@@ -1,4 +1,4 @@
-## Interface: 50200
+## Interface: 50300
 ## Title: FlaresThatWork
 ## Notes: Provides buttons and keybinds for raid flare world markers that never stop working mid-session
 ## Author: oscarucb
