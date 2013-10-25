@@ -38,7 +38,7 @@ local function makebutton(idx)
      icon = tooltip:match("(\124T.+\124t)")
   end
   local btn = CreateFrame("Button", name, addon.border, "SecureActionButtonTemplate")
-  btn.tex = btn:CreateTexture()
+  btn.tex = btn:CreateTexture(nil, "BACKGROUND")
   btn.tex:SetAllPoints()
   btn:SetAttribute("type*", "macro")
   btn:SetAttribute("*-type*", "stop")
