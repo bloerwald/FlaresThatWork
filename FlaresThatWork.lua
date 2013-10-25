@@ -43,7 +43,7 @@ local function makebutton(idx)
   btn:SetAttribute("type*", "macro")
   btn:SetAttribute("*-type*", "stop")
   if idx == 0 then
-    btn:SetAttribute("macrotext", "/clearworldmarker all")
+    btn:SetAttribute("macrotext", "/clearworldmarker 0") -- ticket 3: 0 works for all locales
   else
     btn:SetAttribute("macrotext", "/clearworldmarker "..idx.."\n/worldmarker "..idx)
   end
