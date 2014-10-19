@@ -9,6 +9,12 @@
 	</Binding>
 	<Binding name="CLICK FTW_Set5:LeftButton">
 	</Binding>
+	<Binding name="CLICK FTW_Set6:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Set7:LeftButton">
+	</Binding>
+	<Binding name="CLICK FTW_Set8:LeftButton">
+	</Binding>
 	<Binding name="CLICK FTW_Clear:LeftButton">
 	</Binding>
 </Bindings>

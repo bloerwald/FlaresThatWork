@@ -14,8 +14,8 @@ end
 function addon:updateButtons()
   if SpellIsTargeting() then return end -- may be placing a flare
   local w, h = addon.border:GetSize()
-  local scale = math.min((w-8)/3, (h-8)/2)/iconsz
-  for i=1,5 do
+  local scale = math.min((w-8)/3, (h-8)/3)/iconsz
+  for i=1,8 do
     if IsRaidMarkerActive(i) then
       addon.button[i].tex:SetTexture(1,1,1,1)
     else
@@ -95,7 +95,7 @@ function addon:Initialize()
     insets = { left = 1, right = 1, top = 1, bottom = 1 }
   })
   f:SetBackdropColor(0,0,0,0.5)
-  f:SetSize(8+3*iconsz,8+2*iconsz)
+  f:SetSize(8+3*iconsz,8+3*iconsz)
   f:SetMinResize(f:GetSize())
   f:SetMovable(true)
   f:SetToplevel(true)
@@ -128,8 +128,11 @@ function addon:Initialize()
   makebutton(1):SetPoint("TOPLEFT",xins,-yins)
   makebutton(2):SetPoint("TOP",0,-yins)
   makebutton(3):SetPoint("TOPRIGHT",-xins,-yins)
-  makebutton(4):SetPoint("BOTTOMLEFT",xins,yins)
-  makebutton(5):SetPoint("BOTTOM",0,yins)
+  makebutton(4):SetPoint("LEFT",xins,0)
+  makebutton(5):SetPoint("CENTER",0,0)
+  makebutton(6):SetPoint("RIGHT",-xins,0)
+  makebutton(7):SetPoint("BOTTOMLEFT",xins,yins)
+  makebutton(8):SetPoint("BOTTOM",0,yins)
   makebutton(0):SetPoint("BOTTOMRIGHT",-xins,yins)
   OnEvent("GROUP_ROSTER_UPDATE")
   addon:updateButtons()
@@ -160,5 +163,8 @@ _G["BINDING_NAME_CLICK FTW_Set2:LeftButton"] = WORLD_MARKER2
 _G["BINDING_NAME_CLICK FTW_Set3:LeftButton"] = WORLD_MARKER3
 _G["BINDING_NAME_CLICK FTW_Set4:LeftButton"] = WORLD_MARKER4
 _G["BINDING_NAME_CLICK FTW_Set5:LeftButton"] = WORLD_MARKER5
+_G["BINDING_NAME_CLICK FTW_Set6:LeftButton"] = WORLD_MARKER6
+_G["BINDING_NAME_CLICK FTW_Set7:LeftButton"] = WORLD_MARKER7
+_G["BINDING_NAME_CLICK FTW_Set8:LeftButton"] = WORLD_MARKER8
 _G["BINDING_NAME_CLICK FTW_Clear:LeftButton"] = REMOVE_WORLD_MARKERS
 
