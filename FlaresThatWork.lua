@@ -17,9 +17,9 @@ function addon:updateButtons()
   local scale = math.min((w-8)/3, (h-8)/3)/iconsz
   for i=1,8 do
     if IsRaidMarkerActive(i) then
-      addon.button[i].tex:SetTexture(1,1,1,1)
+      addon.button[i].tex:SetColorTexture(1,1,1,1)
     else
-      addon.button[i].tex:SetTexture(0,0,0,0)
+      addon.button[i].tex:SetColorTexture(0,0,0,0)
     end
     if not InCombatLockdown() then addon.button[i]:SetScale(scale) end
   end
@@ -144,7 +144,7 @@ local function setMarker(idx)
   idx = (idx and tonumber(idx)) or -1
   local btn = addon.button[idx]
   if btn then
-    btn.tex:SetTexture(1,1,1,0.5)
+    btn.tex:SetColorTexture(1,1,1,0.5)
   end
 end
 
