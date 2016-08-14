@@ -1,20 +1,20 @@
 <Bindings>
-	<Binding name="CLICK FTW_Set1:LeftButton" header="FTW">
+	<Binding name="CLICK FTW_Set1:LeftButton" header="FTW" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set2:LeftButton">
+	<Binding name="CLICK FTW_Set2:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set3:LeftButton">
+	<Binding name="CLICK FTW_Set3:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set4:LeftButton">
+	<Binding name="CLICK FTW_Set4:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set5:LeftButton">
+	<Binding name="CLICK FTW_Set5:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set6:LeftButton">
+	<Binding name="CLICK FTW_Set6:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set7:LeftButton">
+	<Binding name="CLICK FTW_Set7:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Set8:LeftButton">
+	<Binding name="CLICK FTW_Set8:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
-	<Binding name="CLICK FTW_Clear:LeftButton">
+	<Binding name="CLICK FTW_Clear:LeftButton" category="BINDING_HEADER_FTW">
 	</Binding>
 </Bindings>
