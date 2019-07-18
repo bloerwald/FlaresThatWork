@@ -120,7 +120,6 @@ function addon:Initialize()
   f:SetScript("OnUpdate",OnUpdate)
   f:RegisterEvent("GROUP_ROSTER_UPDATE")
   f:RegisterEvent("PARTY_LEADER_CHANGED")
-  f:RegisterEvent("PARTY_CONVERTED_TO_RAID")
   f:RegisterEvent("PLAYER_REGEN_ENABLED")
   addon.border = f
 
