@@ -85,7 +85,7 @@ local function OnUpdate(frame,elap)
 end
 
 function addon:Initialize()
-  local f = CreateFrame("Frame", addonName.."Border", UIParent)
+  local f = CreateFrame("Frame", addonName.."Border", UIParent, "BackdropTemplate")
   f:SetBackdrop({
     bgFile = "Interface/DialogFrame/UI-DialogBox-Background",
     edgeFile =  "Interface/DialogFrame/UI-DialogBox-Border",
