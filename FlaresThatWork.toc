@@ -8,5 +8,3 @@
 ## X-Revision: $Revision: 14 $
 
 FlaresThatWork.lua
-
-Bindings.xml
