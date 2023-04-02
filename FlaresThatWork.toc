@@ -6,5 +6,6 @@
 ## X-Build: @project-revision@
 ## X-ReleaseDate: @project-date-iso@
 ## X-Revision: $Revision: 14 $
+## SavedVariables: FlaresThatWorkSettings
 
 FlaresThatWork.lua

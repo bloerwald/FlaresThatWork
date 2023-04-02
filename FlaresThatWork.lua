@@ -5,6 +5,8 @@ local addon = vars
 FlaresThatWork = vars
 local iconsz = 16
 
+FlaresThatWorkSettings = FlaresThatWorkSettings or {}
+
 local function debug(msg)
   if addon.debug then
     print(addonName..": "..msg)
@@ -13,6 +15,14 @@ end
 
 function addon:updateButtons()
   if SpellIsTargeting() then return end -- may be placing a flare
+  if FlaresThatWorkSettings.showFrame and
+     GetNumGroupMembers() > 0 and
+     (not UnitInRaid("player") or
+      (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
+    addon.border:Show()
+  else
+    addon.border:Hide()
+  end
   local w, h = addon.border:GetSize()
   local scale = math.min((w-8)/3, (h-8)/3)/iconsz
   for i=1,8 do
@@ -71,13 +81,7 @@ local function OnEvent(self, event,...)
     return
   end
   if InCombatLockdown() then return end
-  if GetNumGroupMembers() > 0 and 
-     (not UnitInRaid("player") or 
-      (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
-    addon.border:Show()
-  else
-    addon.border:Hide()
-  end
+  addon:updateButtons()
 end
 
 local function OnUpdate(frame,elap)
@@ -93,6 +97,37 @@ function addon:SetupSettings()
   local category, layout = Settings.RegisterVerticalLayoutCategory('FlaresThatWork')
   Settings.RegisterAddOnCategory(category)
 
+  local ConfigureInitializer = function(initializer)
+    initializer:AddSearchTags('FlaresThatWork')
+    return initializer
+  end
+
+  local CreateSetting = function(variable, varType, default, name)
+    local globalDummyVariable = '_global_dummy_FlaresThatWork_' .. variable
+    local setting = Settings.RegisterAddOnSetting(category, name, globalDummyVariable, varType, default)
+
+    Settings.SetOnValueChangedCallback(globalDummyVariable, function(event)
+      FlaresThatWorkSettings[variable] = setting:GetValue()
+      addon:updateButtons()
+    end)
+
+    if FlaresThatWorkSettings[variable] == nil then
+      FlaresThatWorkSettings[variable] = default
+    end
+    setting:SetValue(FlaresThatWorkSettings[variable])
+    setting:SetCommitFlags(Settings.CommitFlag.SaveBindings);
+
+    return setting
+  end
+
+  local AddBoolean = function(variable, default, name, tooltip)
+    local setting = CreateSetting(variable, Settings.VarType.Boolean, default, name)
+    local initializer = Settings.CreateCheckBox(category, setting, tooltip)
+    return ConfigureInitializer(initializer)
+  end
+
+  local showFrameInitializer = AddBoolean("showFrame", Settings.Default.True, 'Show Icon Frame', 'Show Frame with world markers for clicking.')
+
   layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(SETTINGS_KEYBINDINGS_LABEL));
 
   for i=1,8 do
@@ -100,17 +135,17 @@ function addon:SetupSettings()
     local bindingIndex = C_KeyBindings.GetBindingIndex(action);
     local initializer = CreateKeybindingEntryInitializer(bindingIndex, true);
     initializer:AddSearchTags(GetBindingName(action));
-    initializer:AddSearchTags('FlaresThatWork')
-    layout:AddInitializer(initializer);
+    layout:AddInitializer(ConfigureInitializer(initializer))
   end
   do
     local action = "CLICK FTW_Clear:LeftButton"
     local bindingIndex = C_KeyBindings.GetBindingIndex(action);
     local initializer = CreateKeybindingEntryInitializer(bindingIndex, true);
     initializer:AddSearchTags(GetBindingName(action));
-    initializer:AddSearchTags('FlaresThatWork')
-    layout:AddInitializer(initializer);
+    layout:AddInitializer(ConfigureInitializer(initializer))
   end
+
+  addon:updateButtons()
 end
 
 function addon:Initialize()
