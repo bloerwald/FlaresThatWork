@@ -65,7 +65,11 @@ local function makebutton(idx)
   return btn
 end
 
-local function OnEvent(event,...)
+local function OnEvent(self, event,...)
+  if event == "PLAYER_ENTERING_WORLD" then
+    addon:SetupSettings()
+    return
+  end
   if InCombatLockdown() then return end
   if GetNumGroupMembers() > 0 and 
      (not UnitInRaid("player") or 
@@ -82,6 +86,31 @@ local function OnUpdate(frame,elap)
   if addon.elap < 0.5 then return end
   addon.elap = 0
   addon:updateButtons()
+end
+
+
+function addon:SetupSettings()
+  local category, layout = Settings.RegisterVerticalLayoutCategory('FlaresThatWork')
+  Settings.RegisterAddOnCategory(category)
+
+  layout:AddInitializer(CreateSettingsListSectionHeaderInitializer(SETTINGS_KEYBINDINGS_LABEL));
+
+  for i=1,8 do
+    local action = "CLICK FTW_Set" .. i .. ":LeftButton";
+    local bindingIndex = C_KeyBindings.GetBindingIndex(action);
+    local initializer = CreateKeybindingEntryInitializer(bindingIndex, true);
+    initializer:AddSearchTags(GetBindingName(action));
+    initializer:AddSearchTags('FlaresThatWork')
+    layout:AddInitializer(initializer);
+  end
+  do
+    local action = "CLICK FTW_Clear:LeftButton"
+    local bindingIndex = C_KeyBindings.GetBindingIndex(action);
+    local initializer = CreateKeybindingEntryInitializer(bindingIndex, true);
+    initializer:AddSearchTags(GetBindingName(action));
+    initializer:AddSearchTags('FlaresThatWork')
+    layout:AddInitializer(initializer);
+  end
 end
 
 function addon:Initialize()
@@ -119,6 +148,7 @@ function addon:Initialize()
   f:SetScript("OnEvent",OnEvent)
   f:SetScript("OnUpdate",OnUpdate)
   f:RegisterEvent("GROUP_ROSTER_UPDATE")
+  f:RegisterEvent("PLAYER_ENTERING_WORLD")
   f:RegisterEvent("PARTY_LEADER_CHANGED")
   f:RegisterEvent("PLAYER_REGEN_ENABLED")
   addon.border = f
@@ -133,7 +163,7 @@ function addon:Initialize()
   makebutton(7):SetPoint("BOTTOMLEFT",xins,yins)
   makebutton(8):SetPoint("BOTTOM",0,yins)
   makebutton(0):SetPoint("BOTTOMRIGHT",-xins,yins)
-  OnEvent("GROUP_ROSTER_UPDATE")
+  OnEvent(f, "GROUP_ROSTER_UPDATE")
   addon:updateButtons()
 end
 addon:Initialize()
