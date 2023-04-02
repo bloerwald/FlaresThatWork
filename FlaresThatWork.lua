@@ -156,7 +156,7 @@ hooksecurefunc("PlaceRaidMarker", setMarker)
 hooksecurefunc("ClearRaidMarker", clearMarker)
 
 
-BINDING_HEADER_FTW = WORLD_MARKER:gsub("%%.","")
+_G["BINDING_HEADER_FTW"] = WORLD_MARKER:gsub("%%.","")
 _G["BINDING_NAME_CLICK FTW_Set1:LeftButton"] = WORLD_MARKER1
 _G["BINDING_NAME_CLICK FTW_Set2:LeftButton"] = WORLD_MARKER2
 _G["BINDING_NAME_CLICK FTW_Set3:LeftButton"] = WORLD_MARKER3
