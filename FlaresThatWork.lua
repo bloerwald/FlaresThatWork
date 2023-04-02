@@ -49,7 +49,7 @@ local function makebutton(idx)
   end
   btn:SetScript("OnMouseDown", addon.border:GetScript("OnMouseDown"))
   btn:SetScript("OnMouseUp", addon.border:GetScript("OnMouseUp"))
-  btn:RegisterForClicks("AnyDown")
+  btn:RegisterForClicks("AnyDown", "AnyUp")
   btn:SetSize(iconsz, iconsz)
   btn:SetNormalFontObject(GameFontNormal)
   btn:SetText(icon)
