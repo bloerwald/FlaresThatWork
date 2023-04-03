@@ -8,9 +8,9 @@ local iconsz = 16
 FlaresThatWorkSettings = FlaresThatWorkSettings or {}
 
 local function debug(msg)
-  if addon.debug then
-    print(addonName..": "..msg)
-  end
+  --@debug@
+  print(addonName..": "..msg)
+  --@end-debug@
 end
 
 function addon:updateButtons()
