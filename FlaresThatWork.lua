@@ -15,6 +15,7 @@ end
 
 function addon:updateButtons()
   if SpellIsTargeting() then return end -- may be placing a flare
+  if InCombatLockdown() then return end
   if FlaresThatWorkSettings.showFrame and
      GetNumGroupMembers() > 0 and
      (not UnitInRaid("player") or
@@ -31,9 +32,9 @@ function addon:updateButtons()
     else
       addon.button[i].tex:SetColorTexture(0,0,0,0)
     end
-    if not InCombatLockdown() then addon.button[i]:SetScale(scale) end
+    addon.button[i]:SetScale(scale)
   end
-  if not InCombatLockdown() then addon.button[0]:SetScale(scale) end
+  addon.button[0]:SetScale(scale)
 end
 
 local function makebutton(idx)
@@ -84,16 +85,12 @@ local function OnEvent(self, event,...)
   addon:updateButtons()
 end
 
-local function OnUpdate(frame,elap)
-  addon.elap = addon.elap or 0
-  addon.elap = addon.elap + elap
-  if addon.elap < 0.5 then return end
-  addon.elap = 0
-  addon:updateButtons()
-end
-
 
 function addon:SetupSettings()
+  if self.settingsRegistered then
+    return
+  end
+
   local category, layout = Settings.RegisterVerticalLayoutCategory('FlaresThatWork')
   Settings.RegisterAddOnCategory(category)
 
@@ -146,6 +143,8 @@ function addon:SetupSettings()
   end
 
   addon:updateButtons()
+
+  self.settingsRegistered = true
 end
 
 function addon:Initialize()
@@ -181,7 +180,6 @@ function addon:Initialize()
   end)
   f:SetScript("OnMouseUp",function(self) f:StopMovingOrSizing() end)
   f:SetScript("OnEvent",OnEvent)
-  f:SetScript("OnUpdate",OnUpdate)
   f:RegisterEvent("GROUP_ROSTER_UPDATE")
   f:RegisterEvent("PLAYER_ENTERING_WORLD")
   f:RegisterEvent("PARTY_LEADER_CHANGED")
