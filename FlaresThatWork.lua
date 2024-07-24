@@ -119,7 +119,7 @@ function addon:SetupSettings()
 
   local AddBoolean = function(variable, default, name, tooltip)
     local setting = CreateSetting(variable, Settings.VarType.Boolean, default, name)
-    local initializer = Settings.CreateCheckBox(category, setting, tooltip)
+    local initializer = Settings.CreateCheckbox(category, setting, tooltip)
     return ConfigureInitializer(initializer)
   end
 
