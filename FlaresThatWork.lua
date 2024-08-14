@@ -100,18 +100,13 @@ function addon:SetupSettings()
   end
 
   local CreateSetting = function(variable, varType, default, name)
-    local globalDummyVariable = '_global_dummy_FlaresThatWork_' .. variable
-    local setting = Settings.RegisterAddOnSetting(category, name, globalDummyVariable, varType, default)
+    local globalDummyVariable = '_global_dummy_FlaresThatWorkSettings_' .. variable
+    local setting = Settings.RegisterAddOnSetting(category, globalDummyVariable, variable, FlaresThatWorkSettings, varType, name, default)
 
-    Settings.SetOnValueChangedCallback(globalDummyVariable, function(event)
-      FlaresThatWorkSettings[variable] = setting:GetValue()
+    setting:SetValueChangedCallback(function(event)
       addon:updateButtons()
     end)
 
-    if FlaresThatWorkSettings[variable] == nil then
-      FlaresThatWorkSettings[variable] = default
-    end
-    setting:SetValue(FlaresThatWorkSettings[variable])
     setting:SetCommitFlags(Settings.CommitFlag.SaveBindings);
 
     return setting
