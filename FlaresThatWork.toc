@@ -1,4 +1,4 @@
-## Interface: 110000
+## Interface: 110002
 ## Title: FlaresThatWork
 ## Notes: Provides buttons and keybinds for raid flare world markers that never stop working mid-session
 ## Author: oscarucb
