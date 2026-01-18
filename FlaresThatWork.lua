@@ -16,7 +16,7 @@ end
 function addon:updateButtons()
   if SpellIsTargeting() then return end -- may be placing a flare
   if InCombatLockdown() then return end
-  if FlaresThatWorkSettings.showFrame and
+  if FlaresThatWorkSettings.showFrame and IsRaidMarkerSystemEnabled() and
      GetNumGroupMembers() > 0 and
      (not UnitInRaid("player") or
       (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) then
